@@ -19,9 +19,16 @@ class Main extends Pupcake\plugin
         $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin) {
             $response = $event->props("response");
             $plugin->storageSet("response", $response);
+            /**
+             * add setViewEngine method
+             */
             $response->method("setViewEngine", function($view_engine) use ($plugin) {
                 $plugin->setViewEngine($view_engine);
             });
+
+            /**
+             * add render method
+             */
             $response->method("render", function($view_path, $data = array()) use ($plugin) {
                 return  $plugin->render($view_path, $data);
             });
