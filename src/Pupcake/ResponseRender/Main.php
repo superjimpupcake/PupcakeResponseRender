@@ -12,6 +12,9 @@ class Main extends Pupcake\plugin
 
     public function load($config = array())
     {
+        if(!isset($config['view_engine'])){
+            $this->view_engine = 'PHPNative';
+        }
         $plugin = $this;
         $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin) {
             $response = $event->props("response");
@@ -22,7 +25,12 @@ class Main extends Pupcake\plugin
         });
     }
 
-    public function render($view_path, $data = array())
+    public function render($view_path, $data = array(), $return_output = false)
     {
+        $response = $this->storageGet("response");
+        $config = array('view_path' => $view_path, 'data' => $data, 'return_output' => $return_output, 'response' => $response);
+        $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$this->view_engine;
+        $view_engine = new $view_engine_class();
+        return $view_engine->render($config);
     }
 }
