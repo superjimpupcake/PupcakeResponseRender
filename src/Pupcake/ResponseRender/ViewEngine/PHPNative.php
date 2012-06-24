@@ -13,7 +13,7 @@ class PHPNative
      */
     public function render($config)
     {
-        extract($config);
+        extract($config); //extract all params in config array
         $output = "";
         if(is_readable($view_path)){
             ob_start();
