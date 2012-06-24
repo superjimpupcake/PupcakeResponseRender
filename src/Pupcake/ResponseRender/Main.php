@@ -19,6 +19,9 @@ class Main extends Pupcake\plugin
         $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin) {
             $response = $event->props("response");
             $plugin->storageSet("response", $response);
+            $response->method("setViewEngine", function($view_engine) use ($plugin) {
+                $plugin->setViewEngine($view_engine);
+            });
             $response->method("render", function($view_path, $data = array()) use ($plugin) {
                 return  $plugin->render($view_path, $data);
             });
@@ -32,5 +35,10 @@ class Main extends Pupcake\plugin
         $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$this->view_engine;
         $view_engine = new $view_engine_class();
         return $view_engine->render($config);
+    }
+
+    public function setViewEngine($view_engine)
+    {
+        $this->view_engine = $view_engine;
     }
 }
