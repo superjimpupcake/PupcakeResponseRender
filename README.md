@@ -7,6 +7,7 @@ Pupcake Response Render is a Plugin to allow the response object in Plugin Expre
 ####install package "Pupcake/ResponseRender" using composer (http://getcomposer.org/)
 
 ###Usage
+We can simply call render([viewpath], [data]) on the response object
 
 ```php
 <?php

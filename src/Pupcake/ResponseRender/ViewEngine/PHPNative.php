@@ -8,6 +8,9 @@ namespace Pupcake\ResponseRender\ViewEngine;
 
 class PHPNative
 {
+    /**
+     * perform render based on a configuration
+     */
     public function render($config)
     {
         extract($config);
