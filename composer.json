@@ -1,0 +1,28 @@
+{
+    "name": "Pupcake/ResponseRender",
+    "description": "A plugin component for Pupcake Framework to render different types of templates",
+    "keywords": ["microframework", "micro", "framework", "lightweight", "Pupcake/Pupcake", "View", "Rendering"],
+    "homepage": "https://github.com/superjimpupcake/PupcakeResponseRender",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zike Huang",
+            "email": "jim.javathunderbird@gmail.com",
+            "homepage": "http://www.pamground.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+    },
+    "autoload": {
+        "psr-0": {
+            "Pupcake\\ResponseRender": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.0-dev"
+        }
+    }
+}
