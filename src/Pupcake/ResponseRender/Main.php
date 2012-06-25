@@ -37,11 +37,10 @@ class Main extends Pupcake\plugin
 
     public function render($view_path, $data = array(), $return_output = false)
     {
-        $plugin = $this;
-        return $this->trigger("pupcake.responserender.render.start", function($event) use ($plugin) {
-            $response = $plugin->storageGet("response");
+        $response = $this->storageGet("response");
+        return $this->trigger("pupcake.responserender.render.start", function($event){
             $config = array('view_path' => $event->props('view_path'), 'data' => $event->props('data'), 'return_output' => $event->props('return_output'), 'response' => $response);
-            $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$plugin->getViewEngine();
+            $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$event->props('view_engine');
             $view_engine = new $view_engine_class();
             return $view_engine->render($config);
         }, array(
@@ -49,6 +48,7 @@ class Main extends Pupcake\plugin
             'data' => $data,
             'return_output' => $return_output,
             'view_engine' => $this->view_engine,
+            'response' => $response,
         ));
     }
 
