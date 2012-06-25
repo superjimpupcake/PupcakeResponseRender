@@ -13,7 +13,7 @@ class Main extends Pupcake\plugin
     public function load($config = array())
     {
         if(!isset($config['view_engine'])){
-            $this->view_engine = 'PHPNative';
+            $this->view_engine = 'PHPNative'; //set default view engine, PHPNative
         }
         $plugin = $this;
         $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin) {
@@ -37,15 +37,28 @@ class Main extends Pupcake\plugin
 
     public function render($view_path, $data = array(), $return_output = false)
     {
-        $response = $this->storageGet("response");
-        $config = array('view_path' => $view_path, 'data' => $data, 'return_output' => $return_output, 'response' => $response);
-        $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$this->view_engine;
-        $view_engine = new $view_engine_class();
-        return $view_engine->render($config);
+        $plugin = $this;
+        return $this->trigger("pupcake.responserender.render.start", function($event) use ($plugin) {
+            $response = $plugin->storageGet("response");
+            $config = array('view_path' => $event->props('view_path'), 'data' => $event->props('data'), 'return_output' => $event->props('return_output'), 'response' => $response);
+            $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$plugin->getViewEngine();
+            $view_engine = new $view_engine_class();
+            return $view_engine->render($config);
+        }, array(
+            'view_path' => $view_path,
+            'data' => $data,
+            'return_output' => $return_output,
+            'view_engine' => $this->view_engine,
+        ));
     }
 
     public function setViewEngine($view_engine)
     {
         $this->view_engine = $view_engine;
+    }
+
+    public function getViewEngine()
+    {
+        return $this->view_engine;
     }
 }
