@@ -9,23 +9,35 @@ use Pupcake;
 class Main extends Pupcake\plugin
 {
     private $view_engine;
+    private $view_directory;
 
     public function load($config = array())
     {
         if(!isset($config['view_engine'])){
             $this->view_engine = 'PHPNative'; //set default view engine, PHPNative
         }
+
+        $view_directory = ""; //default view directory is empty
         $plugin = $this;
-        $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin) {
+        $app = $this->getAppInstance();
+
+        /**
+         * add setViewEngine method
+         */
+        $app->method("setViewEngine", function($view_engine) use ($plugin) {
+            $plugin->setViewEngine($view_engine);
+        });
+
+        /**
+         * add setViewDirectory method
+         */
+        $app->method("setViewDirectory", function($view_directory) use ($plugin) {
+            $plugin->setViewDirectory($view_directory);
+        });
+
+        $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin, $app) {
             $response = $event->props("response");
             $plugin->storageSet("response", $response);
-            /**
-             * add setViewEngine method
-             */
-            $response->method("setViewEngine", function($view_engine) use ($plugin) {
-                $plugin->setViewEngine($view_engine);
-            });
-
             /**
              * add render method
              */
@@ -48,6 +60,7 @@ class Main extends Pupcake\plugin
             'data' => $data,
             'return_output' => $return_output,
             'view_engine' => $this->view_engine,
+            'view_directory' => $this->view_directory,
             'response' => $response,
         ));
     }
@@ -60,5 +73,15 @@ class Main extends Pupcake\plugin
     public function getViewEngine()
     {
         return $this->view_engine;
+    }
+
+    public function setViewDirectory($view_directory)
+    {
+        $this->view_directory = $view_directory;
+    }
+
+    public function getViewDirectory()
+    {
+        return $this->view_directory;
     }
 }
