@@ -10,6 +10,7 @@ class Main extends Pupcake\plugin
 {
     private $view_engine;
     private $view_directory;
+    private $view_cache_enabled;
 
     public function load($config = array())
     {
@@ -18,6 +19,7 @@ class Main extends Pupcake\plugin
         }
 
         $view_directory = ""; //default view directory is empty
+        $view_cache_enabled = false;
         $plugin = $this;
         $app = $this->getAppInstance();
 
@@ -33,6 +35,20 @@ class Main extends Pupcake\plugin
          */
         $app->method("setViewDirectory", function($view_directory) use ($plugin) {
             $plugin->setViewDirectory($view_directory);
+        });
+
+        /**
+         * add enableViewCache
+         */
+        $app->method("enableViewCache", function() use ($plugin){
+            $plugin->enableViewCache();
+        });
+
+        /**
+         * add disableViewCache
+         */
+        $app->method("disableViewCache", function() use ($plugin){
+            $plugin->disableViewCache();
         });
 
         $this->help("pupcake.plugin.express.response.create", function($event) use ($plugin, $app) {
@@ -59,6 +75,7 @@ class Main extends Pupcake\plugin
             'data' => $data,
             'view_engine' => $this->view_engine,
             'view_directory' => $this->view_directory,
+            'view_cache_enabled' => $this->view_cache_enabled
         ));
         $output = ob_get_contents();
         ob_end_clean();
@@ -89,5 +106,15 @@ class Main extends Pupcake\plugin
     public function getViewDirectory()
     {
         return $this->view_directory;
+    }
+
+    public function enableViewCache()
+    {
+        $this->view_cache_enabled = true;
+    }
+
+    public function disableViewCache()
+    {
+        $this->view_cache_enabled = false;
     }
 }
