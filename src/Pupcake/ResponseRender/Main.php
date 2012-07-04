@@ -80,6 +80,7 @@ class Main extends Pupcake\plugin
         $output = ob_get_contents();
         ob_end_clean();
 
+        header('Content-type: text/html');
         if($return_output){
             return $output;
         }
