@@ -56,7 +56,8 @@ class Main extends Pupcake\plugin
             /**
              * add render method
              */
-            $response->method("render", function($view_path, $data = array()) use ($plugin) {
+            $response->method("render", function($view_path, $data = array()) use ($plugin, $response) {
+                $plugin->setResponse($response);
                 return  $plugin->render($view_path, $data);
             });
         });
@@ -66,7 +67,7 @@ class Main extends Pupcake\plugin
     {
         ob_start();
         $this->trigger("pupcake.responserender.render.start", function($event){
-            $config = array('view_path' => $event->props('view_path'), 'data' => $event->props('data'), 'return_output' => $event->props('return_output'), 'response' => $response);
+            $config = array('view_path' => $event->props('view_path'), 'data' => $event->props('data'), 'return_output' => $event->props('return_output'), 'response' => $event->props('response'));
             $view_engine_class = "Pupcake\\ResponseRender\\ViewEngine\\".$event->props('view_engine');
             $view_engine = new $view_engine_class();
             return $view_engine->render($config);
@@ -75,7 +76,8 @@ class Main extends Pupcake\plugin
             'data' => $data,
             'view_engine' => $this->view_engine,
             'view_directory' => $this->view_directory,
-            'view_cache_enabled' => $this->view_cache_enabled
+            'view_cache_enabled' => $this->view_cache_enabled,
+            'response' => $this->response
         ));
         $output = ob_get_contents();
         ob_end_clean();
@@ -117,5 +119,15 @@ class Main extends Pupcake\plugin
     public function disableViewCache()
     {
         $this->view_cache_enabled = false;
+    }
+
+    public function setResponse($response)
+    {
+        $this->response = $response;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
