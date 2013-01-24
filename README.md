@@ -41,6 +41,8 @@ $app->run();
 ```
 
 Then here is the corresponding index.tpl.php 
-```html
-<h1><?php echo $fields; ?></h1>
+```html 
+<?php foreach($fields as $field>{ ?>
+    <h1><?php echo $fields; ?></h1>
+<?php } ?>
 ```
