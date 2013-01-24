@@ -39,3 +39,6 @@ $app->get("node/:id/edit", function($req, $res) use ($app) {
 
 $app->run();
 ```
+
+Then here is the corresponding index.tpl.php 
+    <h1><?php echo $fields; ?></h1>
